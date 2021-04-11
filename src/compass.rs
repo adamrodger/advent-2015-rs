@@ -31,7 +31,7 @@ impl Default for Point {
 }
 
 impl Point {
-    pub fn new(x: i32, y: i32) -> Self {
+    pub fn _new(x: i32, y: i32) -> Self {
         Self { x, y }
     }
 
