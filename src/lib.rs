@@ -14,5 +14,6 @@ mod day5;
 mod day6;
 pub mod day7;
 mod day8;
+mod day9;
 
 aoc_lib! { year = 2015 }
