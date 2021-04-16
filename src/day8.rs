@@ -60,15 +60,49 @@ pub fn part1(input: &str) -> usize {
     total - unescaped
 }
 
+#[aoc(day8, part2)]
+pub fn part2(input: &str) -> usize {
+    let total: usize = input.lines().map(|l| l.trim().chars().count()).sum();
+
+    let double_escaped: usize = input
+        .lines()
+        .flat_map(|l| unescape(l.trim()).unwrap().1)
+        .map(|c| match c {
+            Character::Raw(_) => 1,
+            Character::SimpleEscape(_) => 4, // transform \" -> \\\"
+            Character::HexEscape(_, _) => 5, // transform \x42 -> \\x42
+        })
+        .sum();
+
+    let quotes = input.lines().count() * 2 * 3; // each line starts and ends with the 3 chars "\"
+
+    quotes + double_escaped - total
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
+    use test_case::test_case;
 
     static INPUT: &str = include_str!("../input/2015/day8.txt");
 
     #[test]
-    fn test_part_1() {
+    fn test_part1() {
         assert_eq!(part1(INPUT), 1333);
+    }
+
+    #[test_case(r#""""# => 4; "empty string")]
+    #[test_case(r#""abc""# => 4; "simple literal string")]
+    #[test_case(r#""aaa\"aaa""# => 6; "simple escape")]
+    #[test_case(r#""aaa\x27aaa""# => 5; "hex escape")]
+    #[test_case(r#"""
+    "abc"
+    "aaa\"aaa"
+    "\x27""# => 19; "multi-line")]
+    #[test_case(INPUT => 2046; "real input")]
+
+    fn test_part2(input: &str) -> usize {
+        part2(input)
     }
 
     #[test]
