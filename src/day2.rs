@@ -1,6 +1,5 @@
+use aoc_runner_derive::{aoc, aoc_generator};
 use std::cmp::min;
-
-use aoc_runner_derive::aoc;
 
 pub struct Present {
     length: usize,

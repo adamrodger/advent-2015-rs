@@ -1,4 +1,4 @@
-use aoc_runner_derive::aoc;
+use aoc_runner_derive::{aoc, aoc_generator};
 use std::{collections::HashMap, str::FromStr};
 
 /// Source for a wire value

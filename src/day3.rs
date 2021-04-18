@@ -1,8 +1,6 @@
-use std::collections::HashSet;
-
-use aoc_runner_derive::aoc;
-
 use crate::compass::{Direction, Point};
+use aoc_runner_derive::{aoc, aoc_generator};
+use std::collections::HashSet;
 
 #[aoc_generator(day3)]
 pub fn generator(input: &str) -> Vec<Direction> {
