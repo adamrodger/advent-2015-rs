@@ -28,10 +28,12 @@ fn add_children(json: &JsonValue, skip_red: bool) -> i32 {
             if skip_red && values.iter().any(|(_, value)| *value == "red") {
                 0
             } else {
-                values.iter().map(|(_, value)| add_children(value, skip_red)).sum()
+                values
+                    .iter()
+                    .map(|(_, value)| add_children(value, skip_red))
+                    .sum()
             }
         }
-
     }
 }
 
