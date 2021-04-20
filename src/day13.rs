@@ -47,6 +47,15 @@ fn parse_instruction(s: &str) -> IResult<&str, Instruction> {
 
 #[aoc(day13, part1)]
 pub fn part1(input: &[Instruction]) -> i32 {
+    solve(input, true)
+}
+
+#[aoc(day13, part2)]
+pub fn part2(input: &[Instruction]) -> i32 {
+    solve(input, false)
+}
+
+fn solve(input: &[Instruction], part1: bool) -> i32 {
     let people = input
         .iter()
         .map(|i| i.first_person.as_str())
@@ -66,21 +75,21 @@ pub fn part1(input: &[Instruction]) -> i32 {
     let mut max = i32::MIN;
 
     for arrangement in people.iter().permutations(people.len()) {
-        // need to create a circle so join last element back to first again
-        let forward: i32 = arrangement
+        let chain: i32 = arrangement
             .iter()
-            .zip(arrangement.iter().cycle().skip(1))
-            .map(|(&&a, &&b)| lookup[&(a, b)])
+            .zip(arrangement.iter().skip(1))
+            .map(|(&&a, &&b)| lookup[&(a, b)] + lookup[&(b, a)])
             .sum();
 
-        let backward: i32 = arrangement
-            .iter()
-            .rev()
-            .zip(arrangement.iter().rev().cycle().skip(1))
-            .map(|(&&a, &&b)| lookup[&(a, b)])
-            .sum();
-
-        let total = forward + backward;
+        let total = if part1 {
+            // need to create a circle so join last element back to first again
+            let first = *arrangement[0];
+            let last = *arrangement[arrangement.len() - 1];
+            chain + lookup[&(first, last)] + lookup[&(last, first)]
+        } else {
+            // effectively we are sitting at the "end" of the chain and have 0 cost, so no need to close the circle
+            chain
+        };
 
         if total > max {
             max = total;
@@ -88,29 +97,6 @@ pub fn part1(input: &[Instruction]) -> i32 {
     }
 
     max
-}
-
-#[aoc(day13, part2)]
-pub fn part2(input: &[Instruction]) -> i32 {
-    let mut extra = Vec::new();
-
-    for i in input {
-        extra.push(Instruction {
-            first_person: i.first_person.to_string(),
-            second_person: "Me".to_string(),
-            happiness: 0,
-        });
-
-        extra.push(Instruction {
-            first_person: "Me".to_string(),
-            second_person: i.first_person.to_string(),
-            happiness: 0,
-        });
-    }
-
-    let input = input.iter().cloned().chain(extra).collect::<Vec<_>>();
-
-    part1(&input)
 }
 
 #[cfg(test)]
