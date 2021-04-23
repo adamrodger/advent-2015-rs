@@ -9,9 +9,7 @@ if [[ -z $day ]]; then
 fi
 
 # make sure repo is up to date
-git fetch
-git checkout -b dev/$day origin/main
-git push -u origin dev/$day
+git pull
 
 cargo aoc input -d $day -y 2015
 
