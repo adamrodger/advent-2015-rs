@@ -31,7 +31,7 @@ impl Default for Point {
 }
 
 impl Point {
-    pub fn _new(x: i32, y: i32) -> Self {
+    pub fn new(x: i32, y: i32) -> Self {
         Self { x, y }
     }
 
@@ -54,5 +54,18 @@ impl Point {
                 y: self.y,
             },
         }
+    }
+
+    pub fn neighbours(&self) -> [Point; 8] {
+        [
+            Point::new(self.x - 1, self.y - 1),
+            Point::new(self.x, self.y - 1),
+            Point::new(self.x + 1, self.y - 1),
+            Point::new(self.x - 1, self.y),
+            Point::new(self.x + 1, self.y),
+            Point::new(self.x - 1, self.y + 1),
+            Point::new(self.x, self.y + 1),
+            Point::new(self.x + 1, self.y + 1),
+        ]
     }
 }
